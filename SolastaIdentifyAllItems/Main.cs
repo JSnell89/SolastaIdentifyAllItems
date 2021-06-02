@@ -6,6 +6,7 @@ using UnityModManagerNet;
 using HarmonyLib;
 using I2.Loc;
 using SolastaModApi;
+using SolastaModApi.Extensions;
 
 namespace SolastaIdentifyAllItems
 {
@@ -68,22 +69,14 @@ namespace SolastaIdentifyAllItems
 
         internal static void ModEntryPoint()
         {
-            // example: use the ModApi to get a skeleton blueprint
-            //
-            var skeleton = DatabaseHelper.MonsterDefinitions.Skeleton;
+            RemoveIdentificationRequirementFromAllItems();
+        }
 
-            // example: how to add TEXTS to the game right
-            //
-            // . almost every game blueprint has a GuiPresentation attribute
-            // . GuiPresentation has a Title and a Description
-            // . Create an entry in Translations-en.txt for those (tab separated)
-            // . Refer to those entries when assigning values to these attributes
-            //
-            // . DON'T FORGET TO CLEAN UP THIS EXAMPLE AND Translations-en.txt file
-            // . ugly things will happen if you don't
-            //
-            skeleton.GuiPresentation.Title = "SolastaIdentifyAllItems/&FancySkeletonTitle";
-            skeleton.GuiPresentation.Description = "SolastaIdentifyAllItems/&FancySkeletonDescription";
+        public static void RemoveIdentificationRequirementFromAllItems()
+        {
+            var itemDB = DatabaseRepository.GetDatabase<ItemDefinition>();
+            foreach (ItemDefinition item in itemDB.GetAllElements())
+                item.SetRequiresIdentification(false);
         }
     }
 }
